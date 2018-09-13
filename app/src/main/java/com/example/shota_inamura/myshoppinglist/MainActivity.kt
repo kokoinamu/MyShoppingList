@@ -8,6 +8,7 @@ import io.realm.kotlin.where
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var realm: Realm
@@ -20,9 +21,13 @@ class MainActivity : AppCompatActivity() {
         val shoppingLists = realm.where<ShoppingList>().findAll()
         listView.adapter = ShoppingListAdapter(shoppingLists)
 
+        listView.setOnItemClickListener { parent, view, position, id ->
+            val shoppingList = parent.getItemAtPosition(position) as ShoppingList
+            startActivity<ShoppingListEditActivity>("shopping_list_id" to shoppingList.id)
+        }
+
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            startActivity<ShoppingListEditActivity>()
         }
     }
 
